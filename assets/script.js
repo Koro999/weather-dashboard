@@ -20,6 +20,12 @@ var cityInputEl = document.querySelector('#city');
 var todayContainerEl = document.querySelector("#today");
 var searchHistoryEl = document.querySelector('#search-history');
 
+var card1 = document.querySelector("#day-1");
+var card2 = document.querySelector("#day-2");
+var card3 = document.querySelector("#day-3");
+var card4 = document.querySelector("#day-4");
+var card5 = document.querySelector("#day-5");
+
 //local storage arrays 
 var searchHistoryArray = [];
 var todayForecast = {location:'', weatherIcon:'', temp:'', wind:'', humidity:''}
@@ -38,7 +44,7 @@ var getCityLocation = function (event) {
     if (cityName) {
         getLocation(cityName);
   
-        todayContainerEl.textContent = '';
+        clear();
         cityInputEl.value = '';
 
         searchHistoryArray.push(cityName);
@@ -79,9 +85,21 @@ $('#history-list').on('click', 'button', function(event) {
     var btnVal = btnEl.innerHTML; 
 
     if (btnEl.getAttribute('type') === 'button'){
+        
+        clear(); 
         getLocation(btnVal); 
     }
 })
+
+var clear = function(){
+    todayContainerEl.textContent = '';
+    card1.textContent ='';
+    card2.textContent ='';
+    card3.textContent ='';
+    card4.textContent ='';
+    card5.textContent ='';
+
+}
 
 // function calls api that grabs the lat and lon values, passes it to the getWeatherForecast function
 var getLocation = function (cityName) {
@@ -166,8 +184,6 @@ var getLocation = function (cityName) {
 
     localStorage.setItem('todayForecast', todayForecast); //save to local 
     
-    
-
     for (let index = 7; index < data.list.length; index+=7) {
             
                 //card information
@@ -200,6 +216,7 @@ var getLocation = function (cityName) {
                 dayCard.append(p3El2)
                 dayCard.append(p4El2)
 
+                console.log(dayNumberSub);
                 //var fiveDayForecast = [{location:'', weatherIcon:'', temp:'', wind:'', humidity:''},
                 fiveDayForecast[dayNumberSub].location =' [' + dayjs.unix(data.list[index].dt).format("MM.DD.YYYY") +'] '
                 fiveDayForecast[dayNumberSub].weatherIcon = 'https://openweathermap.org/img/wn/'+ data.list[index].weather[0].icon +'.png'
@@ -207,11 +224,9 @@ var getLocation = function (cityName) {
                 fiveDayForecast[dayNumberSub].wind = 'Wind: ' + data.list[index].wind.speed + ' MPH';
                 fiveDayForecast[dayNumberSub].humidity = 'Humidity: ' + data.list[index].main.humidity + ' %';
 
-                localStorage.setItem('fiveDayForecast', fiveDayForecast); //save to local 
-            
+                localStorage.setItem('fiveDayForecast', fiveDayForecast); //save to local           
     }
-
-
+    cardCounter = 0;
   };
 
   userFormEl.addEventListener('submit', getCityLocation);
