@@ -41,11 +41,7 @@ var getLocation = function (cityName) {
             
             lat = data[0].lat;
             lon = data[0].lon;
-
-            console.log(lat);
-            console.log(lon);
-
-            //getWeatherForecast(lat ,lon , cityName);
+            getWeatherForecast(lat ,lon);
           });
         } else {
           alert('Error: ' + response.statusText);
@@ -55,26 +51,31 @@ var getLocation = function (cityName) {
         alert('Unable to connect to the Geocoding API');
       });
   };
-  
-/*
-  var getWeatherForecast = function (data, cityName) {
-    var weatherAPI = "api.openweathermap.org/data/2.5/forecast?lat=" + lat + '&lon=' + lon + '&appid=' + apiKey
-  
+
+  var getWeatherForecast = function (lat, lon) {
+    var weatherAPI = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + '&lon=' + lon + '&appid=' + apiKey
+
     fetch(weatherAPI)
       .then(function (response) {
         if (response.ok) {
           console.log(response);
           response.json().then(function (data) {
             console.log(data);
-            displayRepos(data, user);
+            
+            displayWeather(data);
           });
         } else {
           alert('Error: ' + response.statusText);
         }
       })
       .catch(function (error) {
-        alert('Unable to connect to GitHub');
+        alert('Unable to connect to 5 day weather forecast API');
       });
-  };*/
+  };
+
+  var displayWeather = function(data){
+    console.log(data);
+
+  };
 
   userFormEl.addEventListener('submit', getCityLocation);
