@@ -50,7 +50,6 @@ var getCityLocation = function (event) {
 
         //keeps history to a maximum of 10 
         listCounter++;
-        console.log (listCounter);
         if(listCounter >= 10) {
             searchHistoryArray.shift();
             $('#history-list').children().eq(0).remove();
@@ -62,15 +61,26 @@ var getCityLocation = function (event) {
     }
 };
 
+$('#history-list').on('click', 'button', function(event) {
+    event.preventDefault();
+
+    var btnEl = event.target; 
+    var btnVal = btnEl.innerHTML; 
+
+    if (btnEl.getAttribute('type') === 'button'){
+        getLocation(btnVal); 
+    }
+})
+
 var getLocation = function (cityName) {
     var geocodingAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName +'&limit=1&appid=' + apiKey
   
     fetch(geocodingAPI)
       .then(function (response) {
         if (response.ok) {
-          //console.log(response);
+          console.log(response);
           response.json().then(function (data) {
-            //console.log(data);
+            console.log(data);
             
             lat = data[0].lat;
             lon = data[0].lon;
@@ -91,9 +101,9 @@ var getLocation = function (cityName) {
     fetch(weatherAPI)
       .then(function (response) {
         if (response.ok) {
-          //console.log(response);
+          console.log(response);
           response.json().then(function (data) {
-            //console.log(data);
+            console.log(data);
 
             displayWeather(data);
           });
