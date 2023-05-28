@@ -14,16 +14,40 @@ var lon;
 var userFormEl = document.querySelector('#user-form');
 var cityInputEl = document.querySelector('#city');
 var todayContainerEl = document.querySelector("#today");
+var searchHistoryEl = document.querySelector('#search-history');
+
+//local storage arrays 
+var searchHistoryArray = [];
+var fiveDayForecast = [];
 
 var getCityLocation = function (event) {
     event.preventDefault();
     var cityName = cityInputEl.value;
 
     if (cityName) {
-      getLocation(cityName);
+        getLocation(cityName);
   
-      todayContainerEl.textContent = '';
-      cityInputEl.value = '';
+        todayContainerEl.textContent = '';
+        cityInputEl.value = '';
+
+        searchHistoryArray.push(cityName);
+        console.log(searchHistoryArray)
+        //save history to local storage 
+        localStorage.setItem('history', searchHistoryArray);
+
+        var historyOl = document.querySelector('#history-list')
+        var historyLi = document.createElement('li')
+
+        var historyButton = document.createElement('button')
+        historyButton.textContent = cityName;
+        historyButton.classList = "btn btn-secondary w-100 m-1"
+        historyButton.setAttribute('type', 'button')
+
+        historyOl.appendChild(historyLi);
+        historyLi.appendChild(historyButton);
+        
+        
+
     } else {
       alert('Please enter a name of a city!');
     }
@@ -35,9 +59,9 @@ var getLocation = function (cityName) {
     fetch(geocodingAPI)
       .then(function (response) {
         if (response.ok) {
-          console.log(response);
+          //console.log(response);
           response.json().then(function (data) {
-            console.log(data);
+            //console.log(data);
             
             lat = data[0].lat;
             lon = data[0].lon;
@@ -58,10 +82,10 @@ var getLocation = function (cityName) {
     fetch(weatherAPI)
       .then(function (response) {
         if (response.ok) {
-          console.log(response);
+          //console.log(response);
           response.json().then(function (data) {
-            console.log(data);
-            
+            //console.log(data);
+
             displayWeather(data);
           });
         } else {
@@ -74,7 +98,7 @@ var getLocation = function (cityName) {
   };
 
   var displayWeather = function(data){
-    console.log(data);
+    //console.log(data);
 
   };
 
