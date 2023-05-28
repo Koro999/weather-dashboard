@@ -10,6 +10,8 @@ var apiKey = "42db8486013a86dadfafb2d6b067bf5a"
 var lat;
 var lon;
 
+var listCounter = 0;
+
 //event listeners
 var userFormEl = document.querySelector('#user-form');
 var cityInputEl = document.querySelector('#city');
@@ -45,9 +47,16 @@ var getCityLocation = function (event) {
 
         historyOl.appendChild(historyLi);
         historyLi.appendChild(historyButton);
-        
-        
 
+        //keeps history to a maximum of 10 
+        listCounter++;
+        console.log (listCounter);
+        if(listCounter >= 10) {
+            searchHistoryArray.shift();
+            $('#history-list').children().eq(0).remove();
+            localStorage.setItem('history', searchHistoryArray);
+            listCounter = listCounter - 1;
+        }
     } else {
       alert('Please enter a name of a city!');
     }
