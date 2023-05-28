@@ -75,6 +75,7 @@ $('#history-list').on('click', 'button', function(event) {
     }
 })
 
+// function calls api that grabs the lat and lon values, passes it to the getWeatherForecast function
 var getLocation = function (cityName) {
     var geocodingAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName +'&limit=1&appid=' + apiKey
   
@@ -98,6 +99,7 @@ var getLocation = function (cityName) {
       });
   };
 
+  //functioncalls api that grabs the weather forecast, passes it to the displayWeather function 
   var getWeatherForecast = function (lat, lon) {
     var weatherAPI = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + '&lon=' + lon + '&appid=' + apiKey
 
@@ -120,7 +122,55 @@ var getLocation = function (cityName) {
   };
 
   var displayWeather = function(data){
-    //console.log(data);
+    //today's forecast
+    var p1El = document.createElement('p')
+    p1El.classList = "fw-medium fs-3 ms-1";
+    p1El.textContent = data.city.name +' [' + dayjs.unix(data.list[0].dt).format("MM.DD.YYYY") +'] ';
+    var weatherIcon = document.createElement('img')
+    weatherIcon.setAttribute('src', 'https://openweathermap.org/img/wn/'+ data.list[0].weather[0].icon +'.png')
+
+    var p2El = document.createElement('p')
+    p2El.classList = "ms-1";
+    p2El.textContent = 'Temp: ' + data.list[0].main.temp + ' °F'; 
+    var p3El = document.createElement('p')
+    p3El.classList = "ms-1";
+    p3El.textContent = 'Wind: ' + data.list[0].wind.speed + ' MPH'; 
+    var p4El = document.createElement('p')
+    p4El.classList = "ms-1";
+    p4El.textContent = 'Humidity: ' + data.list[0].main.humidity + ' %';
+    
+    todayContainerEl.appendChild(p1El)
+    p1El.appendChild(weatherIcon)
+    todayContainerEl.appendChild(p2El)
+    todayContainerEl.appendChild(p3El)
+    todayContainerEl.appendChild(p4El)
+
+    for (let index = 8; index < data.list.length; index+=8) {
+            if (index <= 40) {
+                //card information
+                
+                var dayCard = $('#day-' + (index-7))
+                console.log(dayCard)
+                
+                
+                p1El = document.createElement('p')
+                p1El.classList = "fw-medium fs-3 ms-1";
+                p1El.textContent ='[' + dayjs.unix(data.list[index].dt).format("MM.DD.YYYY") +']';
+                //weatherIcon.setAttribute('src', 'https://openweathermap.org/img/wn/'+ data.list[index].weather[0].icon +'.png')
+                
+                p2El.textContent = 'Temp: ' + data.list[index].main.temp + ' °F'; 
+                p3El.textContent = 'Wind: ' + data.list[index].wind.speed + ' MPH'; 
+                p4El.textContent = 'Humidity: ' + data.list[index].main.humidity + ' %';
+
+                dayCard.appendChild(p1El)
+                /*
+                dayCard.appendChild(weatherIcon)
+                dayCard.appendChild(p2El)
+                dayCard.appendChild(p3El)
+                dayCard.appendChild(p4El)*/
+            }
+    }
+
 
   };
 
