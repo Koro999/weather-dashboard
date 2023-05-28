@@ -12,6 +12,7 @@ var lon;
 
 //history list counter 
 var listCounter = 0;
+var cardCounter = 0;
 
 //event listeners
 var userFormEl = document.querySelector('#user-form');
@@ -145,30 +146,36 @@ var getLocation = function (cityName) {
     todayContainerEl.appendChild(p3El)
     todayContainerEl.appendChild(p4El)
 
-    for (let index = 8; index < data.list.length; index+=8) {
-            if (index <= 40) {
+    for (let index = 7; index < data.list.length; index+=7) {
+            
                 //card information
+                cardCounter++;
+                var dayCard = $('#day-' + (index-(index-cardCounter)))
+                //console.log(dayCard)
                 
-                var dayCard = $('#day-' + (index-7))
-                console.log(dayCard)
                 
-                
-                p1El = document.createElement('p')
-                p1El.classList = "fw-medium fs-3 ms-1";
-                p1El.textContent ='[' + dayjs.unix(data.list[index].dt).format("MM.DD.YYYY") +']';
-                //weatherIcon.setAttribute('src', 'https://openweathermap.org/img/wn/'+ data.list[index].weather[0].icon +'.png')
-                
-                p2El.textContent = 'Temp: ' + data.list[index].main.temp + ' °F'; 
-                p3El.textContent = 'Wind: ' + data.list[index].wind.speed + ' MPH'; 
-                p4El.textContent = 'Humidity: ' + data.list[index].main.humidity + ' %';
+                var p1El2 = document.createElement('p')
+                p1El2.classList = "fw-medium fs-5 ms-1";
+                p1El2.textContent ='[' + dayjs.unix(data.list[index].dt).format("MM.DD.YYYY") +']';
+                var weatherIcon2 = document.createElement('img')
+                weatherIcon2.setAttribute('src', 'https://openweathermap.org/img/wn/'+ data.list[index].weather[0].icon +'.png')
 
-                dayCard.appendChild(p1El)
-                /*
-                dayCard.appendChild(weatherIcon)
-                dayCard.appendChild(p2El)
-                dayCard.appendChild(p3El)
-                dayCard.appendChild(p4El)*/
-            }
+                var p2El2 = document.createElement('p')
+                p2El2.classList = "ms-1";
+                p2El2.textContent = 'Temp: ' + data.list[index].main.temp + ' °F'; 
+                var p3El2 = document.createElement('p')
+                p3El2.classList = "ms-1";
+                p3El2.textContent = 'Wind: ' + data.list[index].wind.speed + ' MPH'; 
+                var p4El2 = document.createElement('p')
+                p4El2.classList = "ms-1";
+                p4El2.textContent = 'Humidity: ' + data.list[index].main.humidity + ' %';
+    
+                dayCard.append(p1El2)
+                p1El2.append(weatherIcon2)
+                dayCard.append(p2El2)
+                dayCard.append(p3El2)
+                dayCard.append(p4El2)
+            
     }
 
 
