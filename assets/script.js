@@ -5,11 +5,12 @@
 //http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 //use this to grab lat and long based off of city 
 
+//API variables 
 var apiKey = "42db8486013a86dadfafb2d6b067bf5a"
-
 var lat;
 var lon;
 
+//history list counter 
 var listCounter = 0;
 
 //event listeners
@@ -22,6 +23,7 @@ var searchHistoryEl = document.querySelector('#search-history');
 var searchHistoryArray = [];
 var fiveDayForecast = [];
 
+//function handling the form information 
 var getCityLocation = function (event) {
     event.preventDefault();
     var cityName = cityInputEl.value;
@@ -61,6 +63,7 @@ var getCityLocation = function (event) {
     }
 };
 
+//search for weather when history buttons are pressed 
 $('#history-list').on('click', 'button', function(event) {
     event.preventDefault();
 
