@@ -89,7 +89,7 @@ var clear = function(){
 
 // function calls api that grabs the lat and lon values, passes it to the getWeatherForecast function
 var getLocation = function (cityName) {
-    var geocodingAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName +'&limit=1&appid=' + apiKey
+    var geocodingAPI = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName +'&limit=1&appid=' + apiKey
   
     fetch(geocodingAPI)
       .then(function (response) {
