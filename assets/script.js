@@ -39,6 +39,7 @@ var fiveDayForecast =
 //function handling the form information 
 var getCityLocation = function (event) {
     event.preventDefault();
+
     var cityName = cityInputEl.value;
 
     if (cityName) {
@@ -46,8 +47,10 @@ var getCityLocation = function (event) {
   
         clear();
         cityInputEl.value = '';
-
+        localStorage.setItem('city', cityName)// save last used city name to local 
+        console.log(cityName)
         searchHistoryArray.push(cityName);
+
         console.log(searchHistoryArray)
         //save history to local storage 
         localStorage.setItem('history', searchHistoryArray);
@@ -69,7 +72,7 @@ var getCityLocation = function (event) {
             searchHistoryArray.shift();
             $('#history-list').children().eq(0).remove();
 
-            localStorage.setItem('history', searchHistoryArray); //save to local
+            localStorage.setItem('history', searchHistoryArray); //save to local history 
             listCounter = listCounter - 1;
         }
     } else {
@@ -85,7 +88,6 @@ $('#history-list').on('click', 'button', function(event) {
     var btnVal = btnEl.innerHTML; 
 
     if (btnEl.getAttribute('type') === 'button'){
-        
         clear(); 
         getLocation(btnVal); 
     }
@@ -174,7 +176,7 @@ var getLocation = function (cityName) {
     todayContainerEl.appendChild(p3El)
     todayContainerEl.appendChild(p4El)
 
-
+    /*
     //todayForecast = {location:'', weatherIcon:'',temp:'', wind:'', humidity:''}
     todayForecast.location = data.city.name +' [' + dayjs.unix(data.list[0].dt).format("MM.DD.YYYY") +'] '
     todayForecast.weatherIcon = 'https://openweathermap.org/img/wn/'+ data.list[0].weather[0].icon +'.png'
@@ -183,6 +185,7 @@ var getLocation = function (cityName) {
     todayForecast.humidity = 'Humidity: ' + data.list[0].main.humidity + ' %';
 
     localStorage.setItem('todayForecast', todayForecast); //save to local 
+    */
     
     for (let index = 7; index < data.list.length; index+=7) {
             
@@ -216,7 +219,8 @@ var getLocation = function (cityName) {
                 dayCard.append(p3El2)
                 dayCard.append(p4El2)
 
-                console.log(dayNumberSub);
+                //console.log(dayNumberSub);
+                /*
                 //var fiveDayForecast = [{location:'', weatherIcon:'', temp:'', wind:'', humidity:''},
                 fiveDayForecast[dayNumberSub].location =' [' + dayjs.unix(data.list[index].dt).format("MM.DD.YYYY") +'] '
                 fiveDayForecast[dayNumberSub].weatherIcon = 'https://openweathermap.org/img/wn/'+ data.list[index].weather[0].icon +'.png'
@@ -224,9 +228,33 @@ var getLocation = function (cityName) {
                 fiveDayForecast[dayNumberSub].wind = 'Wind: ' + data.list[index].wind.speed + ' MPH';
                 fiveDayForecast[dayNumberSub].humidity = 'Humidity: ' + data.list[index].main.humidity + ' %';
 
-                localStorage.setItem('fiveDayForecast', fiveDayForecast); //save to local           
+                localStorage.setItem('fiveDayForecast', fiveDayForecast); //save to local
+                */           
     }
     cardCounter = 0;
   };
 
+  var init = function(){
+    var lastCity = localStorage.getItem('city')// save last used city name to local 
+    //getCityLocation(lastCity);
+    var searchHistory =localStorage.getItem('history')
+    var searchHistoryParse = searchHistory.split(',')
+    console.log(searchHistoryParse)
+    
+    for (let index = 0; index < searchHistoryParse.length; index++) {
+        var historyOl = document.querySelector('#history-list')
+        var historyLi = document.createElement('li')
+
+        var historyButton = document.createElement('button')
+        historyButton.textContent = searchHistoryParse[index];
+        historyButton.classList = "btn btn-secondary w-100 m-1"
+        historyButton.setAttribute('type', 'button')
+
+        historyOl.appendChild(historyLi);
+        historyLi.appendChild(historyButton);
+    }
+    localStorage.setItem('history', searchHistoryParse); //save to local history 
+  }
+
+  init()
   userFormEl.addEventListener('submit', getCityLocation);
