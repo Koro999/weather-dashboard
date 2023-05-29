@@ -27,20 +27,16 @@ var getCityLocation = function (event) {
     event.preventDefault();
 
     var cityName = cityInputEl.value;
-
+    //if the cityName is truthy call the getLocation function and clear the fields 
     if (cityName) {
         getLocation(cityName);
-  
         clear();
         cityInputEl.value = '';
-        localStorage.setItem('city', cityName)// save last used city name to local 
-        console.log(cityName)
         searchHistoryArray.push(cityName);
-
-        console.log(searchHistoryArray)//
         //save history to local storage 
         localStorage.setItem('history', searchHistoryArray);
 
+        //create list and buttons for search history
         var historyOl = document.querySelector('#history-list')
         var historyLi = document.createElement('li')
 
@@ -52,7 +48,7 @@ var getCityLocation = function (event) {
         historyOl.appendChild(historyLi);
         historyLi.appendChild(historyButton);
 
-        //keeps history to a maximum of 10 
+        //keeps history list and buttons to a maximum of 10 
         listCounter++;
         if(listCounter >= 10) {
             searchHistoryArray.shift();
@@ -62,7 +58,8 @@ var getCityLocation = function (event) {
             listCounter = listCounter - 1;
         }
     } else {
-      alert('Please enter a name of a city!');
+        // if the field is empty make an alert
+        alert('Please enter a name of a city!');
     }
 };
 
@@ -75,12 +72,11 @@ $('#history-list').on('click', 'button', function(event) {
 
     if (btnEl.getAttribute('type') === 'button'){
         clear(); 
-        searchHistoryParse.push(btnVal)
-        localStorage.setItem('history', searchHistoryParse)
         getLocation(btnVal); 
     }
 })
 
+//clear function that clears all the box and cards 
 var clear = function(){
     todayContainerEl.textContent = '';
     card1.textContent ='';
@@ -138,7 +134,7 @@ var getLocation = function (cityName) {
   };
 
   var displayWeather = function(data){
-    //today's forecast
+    //today's forecast text area, create all elements and manipulate api information 
     var p1El = document.createElement('p')
     p1El.classList = "fw-medium fs-3 ms-1";
     p1El.textContent = data.city.name +' [' + dayjs.unix(data.list[0].dt).format("MM.DD.YYYY") +'] ';
@@ -158,14 +154,15 @@ var getLocation = function (cityName) {
     p4El.classList = "ms-1";
     p4El.textContent = 'Humidity: ' + data.list[0].main.humidity + ' %';
     
+    //append and create all elements 
     todayContainerEl.appendChild(p1El)
     p1El.appendChild(weatherIcon)
     todayContainerEl.appendChild(p2El)
     todayContainerEl.appendChild(p3El)
     todayContainerEl.appendChild(p4El)
     
+    //loop through the weather array for cards 
     for (let index = 7; index < data.list.length; index+=7) {
-            
                 //card information
                 cardCounter++;
                 var dayNumber = (index-(index-cardCounter))
@@ -194,13 +191,14 @@ var getLocation = function (cityName) {
                 dayCard.append(p3El2)
                 dayCard.append(p4El2)         
     }
+    //card counter needs to be reset every time for next use 
     cardCounter = 0;
   };
 
+  //initialize function that recalls previous sessions search queries and generates the history list and buttons
   var init = function(){
     var searchHistory =localStorage.getItem('history')
     searchHistoryArray = searchHistory.split(',')
-    
     
     for (let index = 0; index < searchHistoryArray.length; index++) {
         var historyOl = document.querySelector('#history-list')
@@ -213,17 +211,11 @@ var getLocation = function (cityName) {
 
         historyOl.appendChild(historyLi);
         historyLi.appendChild(historyButton);
-
     }
-    searchHistoryArray.push()
-
     console.log(searchHistoryArray)
     localStorage.setItem('history', searchHistoryArray); //save to local history 
-
   }
 
+  //call init function to setup page, add event listener for the form
   init()
   userFormEl.addEventListener('submit', getCityLocation);
-
-  //call the main array and save it to history. 
-  //when called the main array through storage, need to convert to new array 
