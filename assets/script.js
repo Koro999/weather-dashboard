@@ -1,10 +1,3 @@
-//var weatherAPI = "api.openweathermap.org/data/2.5/forecast?lat=" + lat + '&lon=' + lon + '&appid=' + apiKey
-//api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
-//use this to grab 5 day weather value
-//var geocodingAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName +'&limit=5&appid=' + apiKey 
-//http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
-//use this to grab lat and long based off of city 
-
 //API variables 
 var apiKey = "42db8486013a86dadfafb2d6b067bf5a"
 var lat;
@@ -28,13 +21,6 @@ var card5 = document.querySelector("#day-5");
 
 //local storage arrays 
 var searchHistoryArray = [];
-var todayForecast = {location:'', weatherIcon:'', temp:'', wind:'', humidity:''}
-var fiveDayForecast = 
-    [{location:'', weatherIcon:'', temp:'', wind:'', humidity:''},
-    {location:'', weatherIcon:'', temp:'', wind:'', humidity:''},
-    {location:'', weatherIcon:'', temp:'', wind:'', humidity:''},
-    {location:'', weatherIcon:'', temp:'', wind:'', humidity:''},
-    {location:'', weatherIcon:'', temp:'', wind:'', humidity:''}];
 
 //function handling the form information 
 var getCityLocation = function (event) {
@@ -51,7 +37,7 @@ var getCityLocation = function (event) {
         console.log(cityName)
         searchHistoryArray.push(cityName);
 
-        console.log(searchHistoryArray)
+        console.log(searchHistoryArray)//
         //save history to local storage 
         localStorage.setItem('history', searchHistoryArray);
 
@@ -89,6 +75,8 @@ $('#history-list').on('click', 'button', function(event) {
 
     if (btnEl.getAttribute('type') === 'button'){
         clear(); 
+        searchHistoryParse.push(btnVal)
+        localStorage.setItem('history', searchHistoryParse)
         getLocation(btnVal); 
     }
 })
@@ -110,9 +98,9 @@ var getLocation = function (cityName) {
     fetch(geocodingAPI)
       .then(function (response) {
         if (response.ok) {
-          console.log(response);
+          //console.log(response);
           response.json().then(function (data) {
-            console.log(data);
+            //console.log(data);
             
             lat = data[0].lat;
             lon = data[0].lon;
@@ -134,9 +122,9 @@ var getLocation = function (cityName) {
     fetch(weatherAPI)
       .then(function (response) {
         if (response.ok) {
-          console.log(response);
+          //console.log(response);
           response.json().then(function (data) {
-            console.log(data);
+            //console.log(data);
 
             displayWeather(data);
           });
@@ -175,27 +163,14 @@ var getLocation = function (cityName) {
     todayContainerEl.appendChild(p2El)
     todayContainerEl.appendChild(p3El)
     todayContainerEl.appendChild(p4El)
-
-    /*
-    //todayForecast = {location:'', weatherIcon:'',temp:'', wind:'', humidity:''}
-    todayForecast.location = data.city.name +' [' + dayjs.unix(data.list[0].dt).format("MM.DD.YYYY") +'] '
-    todayForecast.weatherIcon = 'https://openweathermap.org/img/wn/'+ data.list[0].weather[0].icon +'.png'
-    todayForecast.temp = 'Temp: ' + data.list[0].main.temp + ' °F';
-    todayForecast.wind = 'Wind: ' + data.list[0].wind.speed + ' MPH';
-    todayForecast.humidity = 'Humidity: ' + data.list[0].main.humidity + ' %';
-
-    localStorage.setItem('todayForecast', todayForecast); //save to local 
-    */
     
     for (let index = 7; index < data.list.length; index+=7) {
             
                 //card information
                 cardCounter++;
                 var dayNumber = (index-(index-cardCounter))
-                var dayNumberSub = dayNumber - 1;
+                //var dayNumberSub = dayNumber - 1;
                 var dayCard = $('#day-' + dayNumber)
-                //console.log(dayCard)
-                
                 
                 var p1El2 = document.createElement('p')
                 p1El2.classList = "fw-medium fs-5 ms-1";
@@ -217,44 +192,38 @@ var getLocation = function (cityName) {
                 p1El2.append(weatherIcon2)
                 dayCard.append(p2El2)
                 dayCard.append(p3El2)
-                dayCard.append(p4El2)
-
-                //console.log(dayNumberSub);
-                /*
-                //var fiveDayForecast = [{location:'', weatherIcon:'', temp:'', wind:'', humidity:''},
-                fiveDayForecast[dayNumberSub].location =' [' + dayjs.unix(data.list[index].dt).format("MM.DD.YYYY") +'] '
-                fiveDayForecast[dayNumberSub].weatherIcon = 'https://openweathermap.org/img/wn/'+ data.list[index].weather[0].icon +'.png'
-                fiveDayForecast[dayNumberSub].temp = 'Temp: ' + data.list[index].main.temp + ' °F';
-                fiveDayForecast[dayNumberSub].wind = 'Wind: ' + data.list[index].wind.speed + ' MPH';
-                fiveDayForecast[dayNumberSub].humidity = 'Humidity: ' + data.list[index].main.humidity + ' %';
-
-                localStorage.setItem('fiveDayForecast', fiveDayForecast); //save to local
-                */           
+                dayCard.append(p4El2)         
     }
     cardCounter = 0;
   };
 
   var init = function(){
-    var lastCity = localStorage.getItem('city')// save last used city name to local 
-    //getCityLocation(lastCity);
     var searchHistory =localStorage.getItem('history')
-    var searchHistoryParse = searchHistory.split(',')
-    console.log(searchHistoryParse)
+    searchHistoryArray = searchHistory.split(',')
     
-    for (let index = 0; index < searchHistoryParse.length; index++) {
+    
+    for (let index = 0; index < searchHistoryArray.length; index++) {
         var historyOl = document.querySelector('#history-list')
         var historyLi = document.createElement('li')
 
         var historyButton = document.createElement('button')
-        historyButton.textContent = searchHistoryParse[index];
+        historyButton.textContent = searchHistoryArray[index];
         historyButton.classList = "btn btn-secondary w-100 m-1"
         historyButton.setAttribute('type', 'button')
 
         historyOl.appendChild(historyLi);
         historyLi.appendChild(historyButton);
+
     }
-    localStorage.setItem('history', searchHistoryParse); //save to local history 
+    searchHistoryArray.push()
+
+    console.log(searchHistoryArray)
+    localStorage.setItem('history', searchHistoryArray); //save to local history 
+
   }
 
   init()
   userFormEl.addEventListener('submit', getCityLocation);
+
+  //call the main array and save it to history. 
+  //when called the main array through storage, need to convert to new array 
