@@ -198,7 +198,7 @@ var getLocation = function (cityName) {
   //initialize function that recalls previous sessions search queries and generates the history list and buttons
   var init = function(){
     var searchHistory =localStorage.getItem('history')
-    if (searchHistoryArray){
+    if (searchHistory){
       searchHistoryArray = searchHistory.split(',')
     }
     listCounter = listCounter + searchHistoryArray.length;
