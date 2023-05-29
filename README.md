@@ -20,6 +20,7 @@ N/A
 ## Screenshot 
 https://github.com/Koro999/weather-dashboard
 koro999.github.io/weather-dashboard/
+![Alt text](/assets/screenshots/1.png)
 
 ## Usage
 
